@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:e_commerce/custom.dart';
 import 'package:e_commerce/model/product_limited.dart';
 import 'package:http/http.dart' as http;
 
 
 class ProductsService{
+
   Future<List<ProductsCategory>> getFew() async {
     const uri = "https://fakestoreapi.com/products?limit=6";
     final url = Uri.parse(uri);
@@ -22,22 +22,43 @@ class ProductsService{
     return [];
   }
 
-  //  Future<Map<String,dynamic>> getSingle(url) async {
-  //   const uri = "https://fakestoreapi.com/products/$url";
-  //   final url = Uri.parse(uri);
-  //   final response = await http.get(url);
-  //   if(response.statusCode == 200){
-  //     final json = jsonDecode(response.body) as Map;
-  //     final categoriesDetails = {
-  //       'id' : json["id"],
-  //       'category' :json["category"],
-  //       'price' : json["price"]
+  Future<Map<String,dynamic>> getProduct(index) async {
+    final uri = "https://fakestoreapi.com/products/$index";
+    final url = Uri.parse(uri);
+    final response = await http.get(url);
+    if(response.statusCode == 200){
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final productDetail = {
+        "id" : json["id"],
+        "image" : json["image"],
+        "title" : json["title"],
+        "description" : json["description"],
+        "price" : json["price"]
+      };
+      //print(productDetail);
+      return productDetail;
+    }
+    else{
+      print("empty");
+      return {};
+    }
+  }
 
-  //     };
-  //     return categoriesDetails;
-  //   }
-  //   return {};
-  // }
+  Future getCart() async {
+    const uri = "https://fakestoreapi.com/carts/5";
+     final url = Uri.parse(uri);
+     final response = await http.get(url);
+     if(response.statusCode == 200){
+      final json = jsonDecode(response.body) as Map;
+      final cartDetail = {
+         "id": json["id"],
+         "products": json["products"]
+      };
+      return cartDetail;
+     }
+     print("empty");
+     return {};
+  }
 
   Future<List<ProductsCategoryAll>> getAll() async {
     const uri = 'https://fakestoreapi.com/products?sort=desc';
@@ -47,6 +68,7 @@ class ProductsService{
       final json = jsonDecode(response.body) as List;
       final categoriesDetails = json.map((categoriesInfo) {
         return ProductsCategoryAll(
+          category: categoriesInfo["categories"],
           id: categoriesInfo["id"],
            title: categoriesInfo["title"] ,
             image: categoriesInfo["image"],
@@ -58,21 +80,26 @@ class ProductsService{
     }
     return [];
   }
-
-  //   Future<Map<String, dynamic>> getCart() async {
-  //     String id =  "id" ;
-  //     String products = "products";
-  //   const uri = 'https://fakestoreapi.com/carts/5';
-  //   final url = Uri.parse(uri);
-  //   final response = await http.get(url);
-  //   if(response.statusCode == 200){
-  //     final json = jsonDecode(response.body) as Map<String,dynamic>;
-  //     return {
-  //       id: json["id"],
-  //        products: json["products"]};
-  //   }
-  //   throw {};
-  // }
+    Future<List<ProductsCategoryAll>> getProductCat(category) async {
+    final uri = 'https://fakestoreapi.com/products/category/$category';
+    final url = Uri.parse(uri);
+    final response = await http.get(url);
+    if(response.statusCode == 200){
+      final json = jsonDecode(response.body) as List;
+      final categoriesDetails = json.map((categoriesInfo) {
+        return ProductsCategoryAll(
+          category: categoriesInfo["category"],
+          id: categoriesInfo["id"],
+           title: categoriesInfo["title"] ,
+            image: categoriesInfo["image"],
+            price: categoriesInfo["price"],
+            description : categoriesInfo["description"]
+            );
+      } ).toList();
+      return categoriesDetails;
+    }
+    return [];
+  }
   
   Future signIn(String username, String password) async {
     const uri = "https://fakestoreapi.com/auth/login";
@@ -87,16 +114,46 @@ class ProductsService{
     );
     if(response.statusCode == 200){
       Map data = jsonDecode(response.body.toString());
+      // print(data["token"]);
+      print("sucessful");
       return data["token"];
     }
     else{ 
-      return "";
+      print("Incorrect");
+      return "Incorrect";
     }
     }
     catch(e){
       print(e.toString());
     }
   }
+
+  // Future signUp(String username, String password) async {
+  //   const uri = "https://fakestoreapi.com/auth/login";
+  //   final url = Uri.parse(uri);
+  //   try{
+  //      final response = await http.post(
+  //     url,
+  //     body: {
+  //       "username" : user,
+  //       "password" : r"m38rmF$"
+  //     }
+  //   );
+  //   if(response.statusCode == 200){
+  //     Map data = jsonDecode(response.body.toString());
+  //     // print(data["token"]);
+  //     print("sucessful");
+  //     return data["token"];
+  //   }
+  //   else{ 
+  //     print("Incorrect");
+  //     return "Incorrect";
+  //   }
+  //   }
+  //   catch(e){
+  //     print(e.toString());
+  //   }
+  // }
 
   Future getUser() async {
     const uri = 'https://fakestoreapi.com/users/1';
@@ -126,5 +183,7 @@ class ProductsService{
     }
     return [];
   }
+
+  
 }
 

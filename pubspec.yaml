@@ -45,6 +45,7 @@ dependencies:
   flutter_laravel_form_validation: ^1.0.3
   email_validator: ^2.1.17
   http: ^0.13.6
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:

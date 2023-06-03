@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:e_commerce/custom.dart';
 import 'package:e_commerce/model/button_provider.dart';
 import 'package:e_commerce/model/category_provider.dart';
 import 'package:e_commerce/views/onboard_screen.dart';
 import 'package:e_commerce/views/signup_screen.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 
 
@@ -21,38 +17,25 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  String token = "";
-   final formKey = GlobalKey<FormState>();
-    Future signIn(String username, String password) async {
-    const uri = "https://fakestoreapi.com/auth/login";
-    final url = Uri.parse(uri);
-    try{
-       final response = await http.post(
-      url,
-      body: {
-        "username" : username,
-        "password" : password
-      }
-    );
-    if(response.statusCode == 200){
-      Map data = jsonDecode(response.body.toString());
-      token = data["token"];
-    }
-    else{
-      token = "";
-    }
-    }
-    catch(e){
-      print(e.toString());
-    }
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  void nextScreen(){
+     Navigator.push(context, MaterialPageRoute(builder: (
+    (context) => ChangeNotifierProvider<AuthenticationProvider>(
+      create: (_) => AuthenticationProvider(),
+      child: const HomePage())
+      )));
+  }
+  void popError(){
+     ErrMes.showSnackBar("Incorrect Password or Username");
+     Navigator.pop(context);
   }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final usernameController = context.select<AuthenticationProvider,TextEditingController>((contType)=> contType.emailController);
-    final passwordController = context.select<AuthenticationProvider,TextEditingController>((contType)=> contType.passwordController); 
-   
     return Scaffold(
       resizeToAvoidBottomInset : false,
       body:SafeArea(
@@ -82,9 +65,7 @@ class _LogInScreenState extends State<LogInScreen> {
                          const SizedBox(height: 33,),
                          TextFormField(
                           autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: (username) => 
-                          username != null ? 
-                         null : "Username can't be empty" ,
+                          validator: (value) => value!.isEmpty ? "Enter Username" : null ,
                           controller: usernameController,
                           cursorColor: const Color(0xffF67952),
                           decoration: InputDecoration(
@@ -182,13 +163,12 @@ class _LogInScreenState extends State<LogInScreen> {
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
                             if(!formKey.currentState!.validate())return ;
-                            await signIn(usernameController.text.trim(), passwordController.text.trim());
-                            token == "" ? ErrMes.showSnackBar("Incorrect Password or Username"):
-                            Navigator.push(context, MaterialPageRoute(builder: (
-                              (context) => ChangeNotifierProvider<AuthenticationProvider>(
-                                create: (_) => AuthenticationProvider(),
-                                child: const HomePage())
-                                ))) ; 
+                            showDialog(context: context,
+                             builder: (context){return const Center(child: CircularProgressIndicator(),);});
+                            await value.loginUser(usernameController.text.trim(),
+                             passwordController.text.trim());
+                            value.token == "Incorrect" ? popError() : nextScreen()
+                            ; 
                           },
                            child: const  Text("Log in")),
                          const SizedBox(height: 44,),
@@ -267,9 +247,13 @@ class _LogInScreenState extends State<LogInScreen> {
                                recognizer: TapGestureRecognizer()
                                   ..onTap = (){
                                     Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) {return ChangeNotifierProvider(
-                                        create: (context) => AuthenticationProvider(),
-                                        child: const SignUpScreen()); }));
+                                      builder: (context) {
+                                        return MultiProvider(
+                                          providers: [
+                                            ChangeNotifierProvider(create: (_) => AuthenticationProvider(),),
+                                            ChangeNotifierProvider(create: (_) => CategoryProvider(),),
+                                          ],
+                                          child: const SignUpScreen());  }));
                                   }
                                ),
                             ],

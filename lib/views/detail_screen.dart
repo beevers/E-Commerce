@@ -1,3 +1,4 @@
+import 'package:e_commerce/custom.dart';
 import 'package:e_commerce/model/product_limited.dart';
 import 'package:flutter/material.dart';
 
@@ -12,8 +13,6 @@ class Detail extends StatefulWidget {
 class _DetailState extends State<Detail> {
   @override
   Widget build(BuildContext context) {
-    // final products = context.select<CategoryProvider,List<ProductsCategoryAll>>(
-    //   (value) => value.products);
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.white,
@@ -99,7 +98,10 @@ class _DetailState extends State<Detail> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                     fixedSize: Size(253,55)
                     ),
-                    onPressed: (){}, child: const  Text("Add to Cart",
+                    onPressed: (){
+                      Navigator.pop(context);
+                      ErrMes.showSnackBar("Product has been added to cart",color: const Color(0xffF67952));
+                    }, child: const  Text("Add to Cart",
                       style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),)
                     ),
                               const SizedBox(height: 20,)

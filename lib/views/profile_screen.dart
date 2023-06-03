@@ -63,7 +63,6 @@ class _ProfileState extends State<Profile> {
             return  [
              const  PopupMenuItem(
                 child:Text("Sign Out"),
-                // value: '/hello',
               ),
             ];
           }),
@@ -105,7 +104,7 @@ class _ProfileState extends State<Profile> {
                         children: [
                           icon[index],
                           Text(title[index]),
-                          Text("5")
+                         const Text("5")
                         ],
                       ),
                     )),
@@ -123,44 +122,43 @@ class _ProfileState extends State<Profile> {
                     width: height/2.04,
                     height: height/4.184,
                     child:  Padding(
-                      padding: EdgeInsets.only(top: 10.8,right: 12,left: 10,bottom: 11),
+                      padding: const EdgeInsets.only(top: 10.8,right: 12,left: 10,bottom: 11),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Name:"),
+                              const Text("Name:"),
                               Text(details["name"] ?? "")
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Email:"),
+                             const Text("Email:"),
                               Text(details["email"] ?? "")
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Location:"),
+                              const Text("Location:"),
                               Text(details["city"] ?? "")
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Zip Code:"),
+                              const Text("Zip Code:"),
                               Text(details["zip"] ?? "")
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Phone Number:"),
+                              const Text("Phone Number:"),
                               Text("+${details["phone"]}")
-                              //TODO use provider for the country code then use substring to remove the first zero.
                             ],
                           ),
                         ],

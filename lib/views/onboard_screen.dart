@@ -33,8 +33,8 @@ class _HomePageState extends State<HomePage> {
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
        
+        resizeToAvoidBottomInset : false,
         body: ChangeNotifierProvider(
           create: (_) => CategoryProvider(),
           child: IndexedStack(
@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
           data: Theme.of(context).copyWith(
           canvasColor: const Color(0xffE5E5E5),
           primaryColor: Colors.red),
-          child:  BottomNavigationBar( //index == 0 ?
+          child:  BottomNavigationBar( 
             showSelectedLabels: false,
             showUnselectedLabels: false,
             backgroundColor:  const Color(0xffE5E5E5),
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             },
             items: itemList.map((e) => BottomNavigationBarItem(
               label:e.label ,
-              icon: Icon(e.icon))).toList()), //: Container(),
+              icon: Icon(e.icon))).toList()), 
         ),
       ),
     );
