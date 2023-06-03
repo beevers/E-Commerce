@@ -1,10 +1,10 @@
-# e_commerce
+# E_commerce
 
-A new Flutter project.
+An online shopping built with a fake Api.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is an online shopping application allowing users to shop based on product category, with authentication based on the fake Api used.
 
 A few resources to get you started if this is your first Flutter project:
 
