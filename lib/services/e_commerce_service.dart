@@ -158,7 +158,8 @@ class ProductsService{
   Future getUser() async {
     const uri = 'https://fakestoreapi.com/users/1';
     final url = Uri.parse(uri);
-    final response = await http.get(url);
+    try{
+      final response = await http.get(url);
     if(response.statusCode == 200){
     int id = 0 ;
    String name = "name";
@@ -182,6 +183,10 @@ class ProductsService{
          return userDetails;
     }
     return [];
+    }
+    catch(e){
+      return [];
+    }
   }
 
   

@@ -209,7 +209,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                   ),
                                 ),
                               ),
-                                SizedBox(width: 35,),
+                               const SizedBox(width: 30,),
                                Container(
                                 decoration: BoxDecoration(
                                 color: Colors.white70,
