@@ -21,7 +21,7 @@ This project is an online shopping application allowing users to shop based on p
 
 ## screenshots
 ## Login
-![](assets/images/login_screen.png)
+![](assets/images/login_screen.png){:height="100px" width="100px"}
 
 ## Signup
 ![](assets/images/signup_screen.png)
